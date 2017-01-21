@@ -2,10 +2,12 @@
 #define StreamingNATS_H
 
 // the #include statment and code go here...
-#include "./protobuff/pb/pb_encode.h"
-#include "./protobuff/pb/pb_decode.h"
-#include "./protobuff/protocol.pb.h"
+#include <ESP8266WiFi.h>
+#include "pb_encode.h"
+#include "pb_decode.h"
+#include "protocol.pb.h"
 #include "ArduinoNATS.h"
+
 
 class StreamingNATS {
 
@@ -34,6 +36,7 @@ private:
 private:
 
   NATS* basicNats;
+  static ConnectResponse connRes;
 
 public:
 
@@ -69,16 +72,17 @@ private:
         return buff;
     }
   }
-  
-  static void dec(NATS::msg msg) {
+
+  static void storeRes(NATS::msg msg) {
     ConnectResponse m = ConnectResponse_init_zero;
     pb_istream_t stream = pb_istream_from_buffer((unsigned char *)msg.data, msg.size);
     pb_decode(&stream, ConnectResponse_fields, &m);
-    Serial.println(m.pubPrefix);
+    connRes = m;
+    Serial.println(connRes.pubPrefix);
   }
 
   void processAll() {
-    delay(100);
+    delay(1000);
     while(basicNats->client->available()) basicNats->process();
   }
 
@@ -91,18 +95,16 @@ public:
   bool connect() {
     //connect to nats server by basicNats
     if (!basicNats->connected) {
-      basicNats->connect();
-      processAll();
-      if (!basicNats->connected) {
+      if (!basicNats->connect()) {
         Serial.println("Connection to nats server failed");
         return false;
       }
     }
     Serial.println("Connection to nats server succeeded!");
-
+    processAll();
     // ConnectRequest
     BYTE* buff= buildMessage(Msg_ConnectRequest, "123", "inbox");
-    basicNats->request("_STAN.discover.test-cluster", (char*)buff, dec);
+    basicNats->request("_STAN.discover.test-cluster", (char*)buff, storeRes);
     free(buff);
   }
 

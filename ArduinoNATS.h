@@ -402,6 +402,7 @@ class NATS {
 			}
 			outstanding_pings++;
 			send(NATS_CTRL_PING);
+      Serial.println("server <----- client: PING");
 		}
 
 		char* generate_inbox_subject() {
