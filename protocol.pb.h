@@ -3,7 +3,7 @@
 
 #ifndef PB_PROTOCOL_PB_H_INCLUDED
 #define PB_PROTOCOL_PB_H_INCLUDED
-#include "./pb/pb.h"
+#include "pb.h"
 
 /* @@protoc_insertion_point(includes) */
 #if PB_PROTO_HEADER_VERSION != 30

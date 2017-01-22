@@ -269,6 +269,7 @@ class NATS {
 		void send(const char* msg) {
 			if (msg == NULL) return;
 			client->println(msg);
+      Serial.printf("server <----- client: %s\n", msg);
 		}
 
 		int vasprintf(char** strp, const char* fmt, va_list ap) {
@@ -290,7 +291,6 @@ class NATS {
 			vasprintf(&buf, fmt, args);
 			va_end(args);
 			send(buf);
-      Serial.printf("server <----- client: %s\n", buf);
 			free(buf);
 		}
 

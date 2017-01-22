@@ -1,14 +1,15 @@
 #include <ESP8266WiFi.h>
 #include "ArduinoNATS.h"
+
 #include "StreamingNATS.h"
 
 /* WIFI */
-const char ssid[] = "Pi-AP";  //  your network SSID (name)
-const char pass[] = "12345678";       // your network password
+const char ssid[] = "David's wifi";  //  your network SSID (name)
+const char pass[] = "wjsylhh8";       // your network password
 WiFiClient client;
 
 /* StreamingNATS */
-char nats_server[] = "172.24.1.141";
+char nats_server[] = "10.70.58.130";
 StreamingNATS* snats = new StreamingNATS(&client, nats_server);
 
 /* Protobuff */
@@ -36,6 +37,8 @@ void setup() {
   wifiConnect();
 
   snats->connect();
+  
+  snats->publish("foo", "msg one");
 }
 
 void loop() {
