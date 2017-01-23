@@ -14,6 +14,8 @@
 #define NATS_GUID_PREFIX "_GUID"
 #define NATS_GUID_LENGTH 22
 
+#define HBINBOX_PREFIX "_HBInbox"
+#define HBINBOX_LENGTH 22
 
 class StreamingNATS {
 
@@ -41,9 +43,11 @@ private:
 
 private:
 
-  NATS* basicNats;
+  static NATS* basicNats;
 
   char * clientID;
+
+  char * heartbeatInbox;
 
   static ConnectResponse connRes;
 
@@ -54,9 +58,9 @@ public:
 // Constructor ---------------------------------------------//
 
 public:
-    StreamingNATS(Client* client, const char* hostname,
-        int port = NATS_DEFAULT_PORT) :
-      basicNats(new NATS(client, hostname, port)){}
+    StreamingNATS(Client* client, const char* hostname, int port = NATS_DEFAULT_PORT) {
+      basicNats = new NATS(client, hostname, port);
+    }
 
 // Methods ----------------------------------------------//
 
@@ -93,7 +97,6 @@ private:
           
           char* data = va_arg(args, char*);
           m.data.size = strlen(data);
-          Serial.println(m.data.size);
           if(data) strcpy((char*)m.data.bytes, data);
           
           char* sha256 = va_arg(args, char*);
@@ -158,6 +161,24 @@ private:
     return buf;
   }
 
+  char* generate_hbInbox() {
+    size_t size = (sizeof(HBINBOX_PREFIX) + sizeof(HBINBOX_LENGTH)) * sizeof(char);
+    char* buf = (char*)malloc(size);
+    strcpy(buf, HBINBOX_PREFIX);
+    int i;
+    for (i = sizeof(HBINBOX_PREFIX)-1; i < size-1; i++) {
+      int random_idx = random(sizeof(NATSUtil::alphanums) - 1);
+      buf[i] = NATSUtil::alphanums[random_idx];
+    }
+    buf[i] = '\0';
+    return buf;
+  }
+
+  static void beatHeart(NATS::msg msg) {
+    basicNats->publish(msg.reply, "");
+    Serial.println("heartbeat");
+  }
+
 public:
 
   void process() {
@@ -177,10 +198,11 @@ public:
     
     // ConnectRequest
     clientID = generate_clientId();
-    BYTE* buff= buildMessage(Msg_ConnectRequest, clientID, "heartbeatInbox");
+    heartbeatInbox = generate_hbInbox();
+    BYTE* buff= buildMessage(Msg_ConnectRequest, clientID, heartbeatInbox);
 //    basicNats->subscribe("_inbox.1", storeRes);
 //    basicNats->publish("_STAN.discover.test-cluster", (char*)buff, "_inbox.1");
-
+    basicNats->subscribe(heartbeatInbox, beatHeart);
     basicNats->request("_STAN.discover.test-cluster", (char*)buff, storeRes);
     free(buff);
     processAll();
@@ -202,6 +224,7 @@ public:
 
   void disconnect() {
     free(clientID);
+    free(heartbeatInbox);
   }
 };
 

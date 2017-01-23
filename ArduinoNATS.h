@@ -269,7 +269,7 @@ class NATS {
 		void send(const char* msg) {
 			if (msg == NULL) return;
 			client->println(msg);
-      Serial.printf("server <----- client: %s\n", msg);
+//      Serial.printf("server <----- client: %/s\n", msg);
 		}
 
 		int vasprintf(char** strp, const char* fmt, va_list ap) {
@@ -318,7 +318,7 @@ class NATS {
 			int i;
 			for (i = 0; client->available();) {
 				char c = client->read();
-        Serial.print(c, HEX);Serial.print(" ");
+//        Serial.print(c, HEX);Serial.print(" ");
 				if (c == '\r') {encountered_r = true;continue;}   //-----------------------------------------------Improvement needed
 				if (c == '\n' && encountered_r) break;
 				if (c == -1) break;
@@ -326,13 +326,13 @@ class NATS {
 				buf[i++] = c;
 			}
 			buf[i] = '\0';
-      Serial.println("");
+//      Serial.println(/"");
 			return buf;
 		}
 
 		void recv() {
 			// read line from client
-      Serial.print("server -----> client: ");
+//      Serial.print("server -----> client: ");
 			char* buf = client_readline();
 			// tokenize line by space
 			size_t argc = 0;
