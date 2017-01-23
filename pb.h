@@ -46,6 +46,7 @@
 
 /* Version of the nanopb library. Just in case you want to check it in
  * your own program. */
+#define PB_FIELD_16BIT
 #define NANOPB_VERSION nanopb-0.3.7
 
 /* Include all the system headers needed by nanopb. You will need the

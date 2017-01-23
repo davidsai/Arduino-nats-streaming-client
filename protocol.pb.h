@@ -78,7 +78,7 @@ typedef struct _PubAck {
 /* @@protoc_insertion_point(struct:PubAck) */
 } PubAck;
 
-#define PB_FIELD_16BIT
+
 
 typedef PB_BYTES_ARRAY_T(2800) PubMsg_data_t;
 typedef PB_BYTES_ARRAY_T(128) PubMsg_sha256_t;

@@ -93,6 +93,7 @@ private:
           
           char* data = va_arg(args, char*);
           m.data.size = strlen(data);
+          Serial.println(m.data.size);
           if(data) strcpy((char*)m.data.bytes, data);
           
           char* sha256 = va_arg(args, char*);

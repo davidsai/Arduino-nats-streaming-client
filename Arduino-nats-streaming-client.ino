@@ -1,5 +1,5 @@
 #include <ESP8266WiFi.h>
-#include "ArduinoNATS.h"
+//#include "ArduinoNATS.h"
 
 #include "StreamingNATS.h"
 
@@ -38,7 +38,8 @@ void setup() {
 
   snats->connect();
   
-  snats->publish("foo", "msg one", "_inbox.ack");
+  snats->publish("foo", "", "_inbox.ack");
+  
 }
 
 void loop() {
