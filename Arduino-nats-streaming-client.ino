@@ -37,6 +37,8 @@ void setup() {
   wifiConnect();
 
   snats->connect();
+  
+  snats->publish("foo", "msg one", "_inbox.ack");
 }
 
 void loop() {

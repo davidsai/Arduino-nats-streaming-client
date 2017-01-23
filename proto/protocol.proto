@@ -21,7 +21,7 @@ message PubMsg {
   string guid     = 2;  // guid
   string subject  = 3;  // subject
   string reply    = 4;  // optional reply
-  bytes  data     = 5;  // payload
+  bytes  data     = 5 [(nanopb).max_size = 2800];  // payload
 
   bytes  sha256  = 10; // optional sha256 of data
 }
