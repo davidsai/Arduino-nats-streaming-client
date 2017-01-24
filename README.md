@@ -12,7 +12,7 @@ Download this repo as a zip file.
 
 Go to Arduino IDE and use _Sketch > Include Library > Add .ZIP Library_ to include the zip file as a library.
 
-Add #include <StreamingNATS.h> at the top of your program.
+Add #include \<StreamingNATS.h\> at the top of your program.
 
 ## API
 ```c
