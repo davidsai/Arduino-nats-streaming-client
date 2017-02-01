@@ -212,11 +212,11 @@ public:
   void publish(char* subject, const char* msg = NULL, const char* replyto = NULL) {
     if (subject == NULL || subject[0] == 0) return;
     if (!connected) return;
-
     char* guid = generate_guid();
     BYTE* buff = buildMessage(Msg_PubMsg, clientID, guid, subject, NULL, msg, NULL); 
     char* pubSubj = generate_subject(subject);
     basicNats->publish(pubSubj, (char*)buff, replyto);
+    
     free(pubSubj);
     free(guid);  
     free(buff);
