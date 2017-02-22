@@ -21,7 +21,7 @@ This library is build based on joshglendenning/arduino-nats, a library for commu
 This software is licensed under MIT license.
 
 This library uses Protocol Buffer provided by nanopb, a small code-size Protocol Buffers implementation in ansi C (https://github.com/nanopb/nanopb).
-This software is licensed under MIT license.
+This software is licensed under zlib license.
 ___________________________________________________________________
 
 
