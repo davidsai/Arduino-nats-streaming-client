@@ -31,6 +31,6 @@ class StreamingNATS {
   
   void disconnect();
   
-  void process(); // proces pending messages from the buffer, must be called regularly in loop()
+  void process(); // process pending messages from the buffer, must be called regularly in loop()
 }
 ```
